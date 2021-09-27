@@ -2,7 +2,7 @@
 <html>
 <meta charset="UTF-8">
 
-<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+
 
 
 <!--  _________________________________PARTIE JS APPROFONDIE____________________________________________ -->
@@ -25,6 +25,8 @@
 			//puis ensuite un tableau qui stocker les valeurs établi aléatoirement
 		let tab_ChiffreDigit=[100,100,100,100,100,100,100,100,100];
 		var textErreurMDP="Mot de passe incorrect, veuillez réessayer";
+			 var test = document.cookie;
+       				 console.log(test);
 
 
 		//GESTION COOKIE--------------------------------------------------------------------------
@@ -32,6 +34,7 @@
 
 				if (document.cookie.length > 0){
        				 var tablecookie = document.cookie.split(';');
+       			
        				 var nomcookie = "cookieMDP=";
         			 var valeurcookie = "";
        				 for (i=0;i<tablecookie.length;i++){
@@ -40,7 +43,8 @@
               		     }
                      }
   			    }
-  			    console.log(valeurcookie);
+
+  			    
 				MDP_A_Trouver=valeurcookie;
 
 				getCookieLgthMDP();
@@ -58,7 +62,7 @@
               		     }
                      }
   			    }
-  			    console.log(valeurcookie);
+  			   // console.log(valeurcookie);
   			    longMDP=valeurcookie;
 			}
 	
