@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+
+
+
+
+<!--_________________________________________PARTIE JS___________________________________________-->
+<script type="text/javascript">
+
+	var lgtMin=3;
+	var lgtMax=6;
+	var msgValide="La proposition entrée a bien été prise en compte, vous allez être redirigé vers la page du jeu...";
+	var msgErreur="La combinaison entrée ne correspond pas aux critères demandés, veuillez réessayer";
+
+
+
+	function checkValid(idMDP, idDivAffichage){
+		mDP=document.getElementById(idMDP);
+		divAffichage=document.getElementById(idDivAffichage);
+
+		//if(isNB(mDP)==true){
+			//console.log("c'est un nb");
+			var length=Math.max(Math.floor(Math.log10(Math.abs(mDP.value))), 0) + 1;
+			if(length>=lgtMin && length<lgtMax+1){
+
+				divAffichage.innerHTML=msgValide;
+				feedbackValid(idMDP, divAffichage);
+				setCookie("cookieMDP",mDP.value);
+				setCookie("lghtMDP",length);
+				setTimeout(goToNextPage,2000);
+				
+			}
+			else{
+				divAffichage.innerHTML=msgErreur;
+				feedbackErreur(idMDP, divAffichage);
+			}
+		//}
+		//else{
+		//	console.log("ce n'est pas un nb");
+		//}
+	}
+
+
+	function isNB(mDP){
+		if(isNaN(mDP.value)==true){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+
+
+
+
+	function setCookie(nom, valeur){
+
+		document.cookie=nom+"="+valeur+"; SameSite=None; Secure";
+	}
+
+
+	function goToNextPage(){
+		document.location.href="CodeATrouver.html";
+	}
+
+
+	function feedbackValid(idMDP, divAffichage){
+		inputEntree=document.getElementById(idMDP);
+		inputEntree.style.borderColor="green";
+		inputEntree.style.backgroundColor="#7FFF00";
+
+			divAffichage.style.color="green";
+
+	}
+	function feedbackErreur(idMDP, divAffichage){
+
+		inputEntree=document.getElementById(idMDP);
+		inputEntree.style.borderColor="red";
+		inputEntree.style.backgroundColor="#FFB6C1";
+
+		divAffichage.style.color="red";
+	}
+	
+
+
+
+</script>
+
+
+
+
+
+
+<!-- _______________________________________PARTIE HTML__________________________________________ -->
+<head>
+	<title>Configuration du mot de passe</title>
+</head>
+<body>
+	<header>
+		<h1>Bienvenue à vous Game Master ;)</h1>
+		<h3>Veuillez configurer le jeu à partir de l'entrée ci-dessous:</h3>
+	</header>
+
+
+	<section>
+		<p>Vous devez entrer une combinaison dont le nombre doit comporter au minimum 3 chiffres et au maximum 6</p>
+		<div id="div1">
+			<input placeholder ="Mot de passe de 3 à 6 chiffre maximum"type="number" id="inputMDP_A_Trouver" name="inputMDP_A_Trouver" size=40>
+		</div>
+		<div id="div2">
+			<input type="button" id="idBoutonValid" value="Valider" onclick="checkValid('inputMDP_A_Trouver','divAffichageFeedback')">
+		</div>
+	</section>
+
+	<section>
+		<div id="divAffichageFeedback">
+			
+		</div>
+	</section>
+
+
+	<footer>
+	</footer>
+
+</body>
+
+
+
+
+
+
+
+<!-- _____________________________________PARTIE CSS__________________________________________________-->
+
+
+<style type="text/css">
+	
+	header{
+		text-align: center;
+		margin-top:11%;
+	}
+	h1{
+		margin-bottom: 2%;
+	}
+	h3{
+		margin-top:2%;
+	}
+	div{
+		display: flex;
+		justify-content: center;
+		width: 100%;
+
+		margin-top:1%;
+	}
+
+	section{
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+
+		margin-top:3%;
+	}
+
+
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>

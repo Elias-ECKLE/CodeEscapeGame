@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+
+
+<!--  _________________________________PARTIE JS APPROFONDIE_____________________________________________ -->
+
+	<script>
+		
+	//VARIABLES ---------------------------------------------------------------------------------
+
+	//création des div du digit dynamiquement
+		var nbDivLigne=3;
+		var nbDivColonne=3;
+	//gestion de l'affichage aléatoire des chiffres entre 0 et 9 dans chaque Digit
+		//on déclare dans un premier tps nos valeurs min et max du digit
+		var min=1;
+		var max=10;
+		var longMDP=4; //par défaut
+		var stateMDPEntre=0;
+		var MDP=" ";
+		var MDP_A_Trouver="1234"; //mot de passe par défaut
+			//puis ensuite un tableau qui stocker les valeurs établi aléatoirement
+		let tab_ChiffreDigit=[100,100,100,100,100,100,100,100,100];
+		var textErreurMDP="Mot de passe incorrect, veuillez réessayer";
+
+
+		//GESTION COOKIE--------------------------------------------------------------------------
+			function getCookieMDP(){
+
+				if (document.cookie.length > 0){
+       				 var tablecookie = document.cookie.split(';');
+       				 var nomcookie = "cookieMDP=";
+        			 var valeurcookie = "";
+       				 for (i=0;i<tablecookie.length;i++){
+               			 if(tablecookie[i].indexOf(nomcookie) != -1){
+                    		valeurcookie = tablecookie[i].substring(nomcookie.length + tablecookie[i].indexOf(nomcookie), tablecookie[i].length);
+              		     }
+                     }
+  			    }
+  			    console.log(valeurcookie);
+				MDP_A_Trouver=valeurcookie;
+
+				getCookieLgthMDP();
+			}
+
+
+			function getCookieLgthMDP(){
+				if (document.cookie.length > 0){
+       				 var tablecookie = document.cookie.split(';');
+       				 var nomcookie = "lghtMDP=";
+        			 var valeurcookie = "";
+       				 for (i=0;i<tablecookie.length;i++){
+               			 if(tablecookie[i].indexOf(nomcookie) != -1){
+                    		valeurcookie = tablecookie[i].substring(nomcookie.length + tablecookie[i].indexOf(nomcookie), tablecookie[i].length);
+              		     }
+                     }
+  			    }
+  			    console.log(valeurcookie);
+  			    longMDP=valeurcookie;
+			}
+	
+
+
+
+		//GESTION DE LA VUE -----------------------------------------------------------
+			function digitAleatoire(nbDigitColonne, nbDigitLigne, min,max){
+			//on récpuère par le DOM la grilleDigit et on y affiche les 9 valeurs aléatoires
+				var iTemp=0;
+				var randomTemp=0;
+				var isDoublon=false;
+				var l=0;
+				var divColonne;
+
+				
+				for(i=0;i<nbDigitLigne;i++){
+					iTemp=i+1;
+					divColonne=document.getElementById("div_ColonneDigit"+iTemp);
+
+
+						for(j=0;j<nbDigitColonne;j++){
+						//attention il ne faut pas de doublons
+							
+							do{
+								isDoublon=false;
+								randomTemp=Math.floor(Math.random() * (max - min)) + min;
+								divColonne.childNodes[j].value=randomTemp;
+								tab_ChiffreDigit[l]=randomTemp;
+
+								for (k=0;k<l;k++){
+
+									if(randomTemp==tab_ChiffreDigit[k]){
+
+										isDoublon=true;
+									}
+									
+								}
+
+							}while(isDoublon==true);
+							l++;
+							//console.log(tab_ChiffreDigit);
+
+						}
+				}
+
+			}
+			function majLoginMDP(idObjet){
+
+				var inputObjet=document.getElementById(idObjet);
+				var p_Result=document.getElementById('p_MDP');
+				//var input_passageMDP=document.getElementById('passageMDP');
+				
+				if(stateMDPEntre<longMDP){
+					if(stateMDPEntre==0){
+						p_Result.innerHTML="";
+					}
+					
+						p_Result.innerHTML=p_Result.innerText+inputObjet.value;
+					
+					//input_passageMDP.value=inputMDP_Result.value;
+					MDP=p_Result.innerHTML;
+					stateMDPEntre++;
+				}			//console.log(input_passageMDP.value);
+
+
+			}
+
+
+
+		//GESTION DES ENTREES ---------------------------------------------------------
+			function resetEntrees_Annuler(idMDP){
+				var mDP= document.getElementById(idMDP);
+
+				mDP.innerHTML="";
+				stateMDPEntre=0;
+			}
+
+			function checkValid(){
+				if(MDP==MDP_A_Trouver){
+					document.location.href="Victoire.html";
+				}
+				else{
+					erreurMDP();
+				}
+
+			}
+
+
+
+		//GESTION DES FEEDBACKS--------------------------------------------------------
+			function erreurMDP(){
+
+				//var chpMDP=document.getElementById("article_ChpMDP");
+				var divObjet=document.getElementById("divAffichageErreurs");
+
+				//div affichage erreur
+				divObjet.innerHTML=textErreurMDP;
+				divObjet.style.color="red";
+				divObjet.style.borderStyle="solid";
+				divObjet.style.borderWidth="1px";
+				divObjet.style.borderColor="red";
+				divObjet.style.backgroundColor="#FFB6C1";
+
+				resetEntrees_Annuler("p_MDP");
+
+			}
+
+
+
+
+
+
+	</script>
+
+
+
+<!--______________________________ PARTIE HTML AVEC VUE CREE EN JS __________________________________ -->
+
+<head>
+	<title>Code à trouver</title>
+</head>
+<body onload="getCookieMDP(), digitAleatoire(nbDivLigne,nbDivColonne,min, max)">
+
+	<header>
+	</header>
+
+		<section id="section_Digit" name="section_Digit">
+
+			
+
+	    		<article id="article_ChpMDP">
+					<p style="text-align:center" name="p_MDP" id="p_MDP">
+						Entrez le code demandé
+					</p>	
+				</article>
+				
+
+				<article id="article_GrilleDigit">
+					<script type="text/javascript">
+						var k=0;
+
+						for(i=0;i<nbDivLigne;i++){
+
+							iTemp=i+1;
+							document.write("<div id=div_ColonneDigit"+iTemp+">");
+							for(j=0;j<nbDivColonne;j++){
+								jTemp=j+1;
+								document.write("<input type='button' onclick='majLoginMDP(this.id);'  id='input_digit"+k+"' name=input_digit"+k+" ></input>");
+								k++;
+							}
+			
+							document.write("</div>");
+						}
+						document.write(
+							" <div id=div_ColonneDigitDerniere> <input id='input_digitAnnuler' type='button' name='input_digitAnnuler' value='Annuler' onclick=resetEntrees_Annuler('p_MDP')></input> <input id='input_digit9' type='button' onclick='majLoginMDP(this.id)' name='input_digit0' value='0'></input><input id=input_digitValider name='input_digitValider' type='button' value='Entrer' onclick=checkValid()></input></div>");
+					</script>
+				</article>
+
+						<div id="divAffichageErreurs">
+				
+			</div>
+		</section>
+
+
+	
+
+
+	<footer>
+	</footer>
+
+</body>
+
+
+
+
+
+
+
+
+<!-- _________________________________________PARTIE CSS _________________________________________________________________-->
+	<style type="text/css">
+		
+		#section_Digit{
+
+			border-style: solid;
+
+			width: 45%;
+			height: 50vh;
+
+			margin-left: auto;
+			margin-right: auto;
+			margin-top:12%;
+			margin-bottom:12%;
+		}
+
+		#section_Digit article{
+
+			border-bottom: solid;
+		}
+
+
+		#section_Digit article:nth-child(2){
+
+			width:100%;
+			height: 50%;
+			margin-left:auto;
+			margin-right:auto;
+			margin-top:12%;
+			margin-bottom:25%;
+
+			border-style:none;
+			display: flex;
+
+			justify-content: center;
+			align-items: center;
+		}
+
+
+		#section_Digit article:nth-child(2) form{
+
+			display: flex;
+
+			justify-content: center;
+			align-items: center;
+			height:100%;
+			width:100%;
+		}
+
+		#section_Digit article:nth-child(2) div{
+			
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+
+		#section_Digit article:nth-child(2) input{
+
+			border-radius: 40px;
+
+
+			width:85%;
+			height: 20%;
+
+		}
+
+
+	</style>
+
+
+</html>
